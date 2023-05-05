@@ -9,14 +9,6 @@ const {
 
 const PORT = 3000;
 
-const getRandomName = async () => {
-  const response = await fetch('https://randomuser.me/api/');
-  const data = await response.json();
-  return `${data?.results?.at(0)?.name?.first} ${
-    data?.results?.at(0)?.name?.last
-  }`;
-};
-
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
