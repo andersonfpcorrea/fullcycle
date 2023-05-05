@@ -10,13 +10,13 @@ services:
     ports:
       - '8080:80'
     depends_on:
-      - app
+      - node
 
-  app:
+  node:
     build:
       context: node
-    container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh && npm start
+    container_name: node
+    entrypoint: bash -c "dockerize -wait tcp://db:3306 -timeout 20s && npm start"
     networks:
       - node-nginx
     volumes:
