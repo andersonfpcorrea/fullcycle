@@ -11,7 +11,7 @@ git clone git@github.com:andersonfpcorrea/fullcycle.git
 2 - cd to `nginx-node`
 
 ```bash
-cd 1-docker/challenges/nginx-node/
+cd fullcycle/1-docker/challenges/nginx-node/
 ```
 
 3 - Run the containers
