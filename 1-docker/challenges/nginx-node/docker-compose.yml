@@ -16,7 +16,7 @@ services:
     build:
       context: node
     container_name: node
-    entrypoint: bash -c "dockerize -wait tcp://db:3306 -timeout 20s && npm start"
+    entrypoint: bash -c "dockerize -wait tcp://db:3306 -timeout 20s && npm install && npm start"
     networks:
       - node-nginx
     volumes:
