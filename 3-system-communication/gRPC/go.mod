@@ -1,4 +1,4 @@
-module github.com/devfullcycle/14-gRPC
+module github.com/devfullcycle/goexpert/14-gRPC
 
 go 1.20
 
