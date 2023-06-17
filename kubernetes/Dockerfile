@@ -1,4 +1,10 @@
-FROM golang:1.20
+FROM golang:alpine AS builder
+WORKDIR /go
 COPY server.go .
 RUN go build server.go
-CMD ["./server"]
+
+# Optimazation
+FROM scratch
+WORKDIR /go
+COPY --from=builder /go .
+ENTRYPOINT [ "./server" ] 

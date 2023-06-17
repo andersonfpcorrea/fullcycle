@@ -1,12 +1,18 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+	"os"
+)
 
 func main() {
 	http.HandleFunc("/", Hello)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":80", nil)
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("<h1>Hello, Fullcycle!!!</h1>"))
+	name := os.Getenv("NAME")
+	age := os.Getenv("AGE")
+	fmt.Fprintf(w, "Hello, %s! You are %s years old.", name, age)
 }
