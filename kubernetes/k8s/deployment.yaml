@@ -16,7 +16,15 @@ spec:
     spec:
       containers:
         - name: "goserver"
-          image: "andersonfpcorrea/hello-go:v6"
+          image: "andersonfpcorrea/hello-go:v7"
+          livenessProbe: # watch -n1 kubectl get pods
+            httpGet:
+              path: /healthz
+              port: 80
+            periodSeconds: 5
+            failureThreshold: 3
+            timeoutSeconds: 1
+            successThreshold: 1
           envFrom:
             - configMapRef:
                 name: goserver-env
