@@ -30,10 +30,12 @@ spec:
             httpGet:
               path: /healthz
               port: 80
+            initialDelaySeconds: 20
             periodSeconds: 5
             failureThreshold: 3
             timeoutSeconds: 1
             successThreshold: 1
+
           envFrom:
             - configMapRef:
                 name: goserver-env

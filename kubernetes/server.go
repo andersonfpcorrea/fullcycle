@@ -45,7 +45,7 @@ func Healthz(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		w.Write([]byte(fmt.Sprintf("Unavailable: %v", duration.Seconds())))
 	}
-	if duration.Seconds() > 25 {
+	if duration.Seconds() > 30 {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(fmt.Sprintf("Failed: %v", duration.Seconds())))
 	} else {
