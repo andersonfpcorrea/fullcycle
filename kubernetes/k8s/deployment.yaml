@@ -18,11 +18,18 @@ spec:
         - name: "goserver"
           image: "andersonfpcorrea/hello-go:v8"
 
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            periodSeconds: 3
+            failureThreshold: 30
+
           readinessProbe:
             httpGet:
               path: /healthz
               port: 80
-            initialDelaySeconds: 10
+            # initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 1
 
@@ -30,7 +37,7 @@ spec:
             httpGet:
               path: /healthz
               port: 80
-            initialDelaySeconds: 20
+            # initialDelaySeconds: 20
             periodSeconds: 5
             failureThreshold: 3
             timeoutSeconds: 1
