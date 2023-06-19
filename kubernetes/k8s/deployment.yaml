@@ -16,27 +16,27 @@ spec:
     spec:
       containers:
         - name: "goserver"
-          image: "andersonfpcorrea/hello-go:v8"
+          image: "andersonfpcorrea/hello-go:v11"
           # vCPU -> 1000m (milicores) = 1 CPU1
           resources:
             requests: # min resources. If not available, the pod will not be scheduled
-              cpu: "0.3" # 300m or 0.3 (milicores)
+              cpu: "0.05" # 300m or 0.3 (milicores)
               memory: 20Mi
             limits:
-              cpu: "0.3"
+              cpu: "0.05"
               memory: 25Mi
 
           startupProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: 8080
             periodSeconds: 3
             failureThreshold: 30
 
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: 8080
             # initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 1
@@ -44,10 +44,10 @@ spec:
           livenessProbe: # watch -n1 kubectl get pods
             httpGet:
               path: /healthz
-              port: 80
+              port: 8080
             # initialDelaySeconds: 20
             periodSeconds: 5
-            failureThreshold: 3
+            failureThreshold: 1
             timeoutSeconds: 1
             successThreshold: 1
 

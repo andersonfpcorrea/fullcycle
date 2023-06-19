@@ -16,7 +16,7 @@ func main() {
 	http.HandleFunc("/secret", Secret)
 	http.HandleFunc("/healthz", Healthz)
 	http.HandleFunc("/", Hello)
-	http.ListenAndServe(":80", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -41,13 +41,10 @@ func Secret(w http.ResponseWriter, r *http.Request) {
 
 func Healthz(w http.ResponseWriter, r *http.Request) {
 	duration := time.Since(startedAt)
+
 	if duration.Seconds() < 10 {
 		w.WriteHeader(http.StatusServiceUnavailable)
-		w.Write([]byte(fmt.Sprintf("Unavailable: %v", duration.Seconds())))
-	}
-	if duration.Seconds() > 30 {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("Failed: %v", duration.Seconds())))
+		w.Write([]byte(fmt.Sprintf("Duration: %v", duration.Seconds())))
 	} else {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("ok"))
