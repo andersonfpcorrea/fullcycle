@@ -20,3 +20,5 @@ watch -n1 kubectl get hpa
 ````
 
 OBS: Fortio will make the requests to port 80 of the service
+
+Another option for load tests: [k6.io](https://k6.io/)
