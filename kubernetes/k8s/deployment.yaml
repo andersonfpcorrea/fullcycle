@@ -17,6 +17,14 @@ spec:
       containers:
         - name: "goserver"
           image: "andersonfpcorrea/hello-go:v8"
+          # vCPU -> 1000m (milicores) = 1 CPU1
+          resources:
+            requests: # min resources. If not available, the pod will not be scheduled
+              cpu: 100m
+              memory: 20Mi
+            limits:
+              cpu: 500m
+              memory: 25Mi
 
           startupProbe:
             httpGet:
