@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce # Pods can read and write to the volume in the same node
+    # - ReadWriteMany
+    # - ReadOnlyMany
+    # - ReadWriteOnce
+  # storageClassName: local-storage
