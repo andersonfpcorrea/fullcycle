@@ -7,3 +7,9 @@ services:
       - 3000:3000
     volumes:
       - .:/home/node/app
+    networks:
+      - external_net
+
+networks:
+  external_net:
+    external: true

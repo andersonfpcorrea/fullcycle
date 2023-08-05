@@ -1,7 +1,11 @@
-FROM node:19.0-slim
+FROM node
 
 WORKDIR /home/node/app
 
-USER node
+COPY . .
 
-CMD ["tail", "-f", "/dev/null"]
+RUN ["npm", "install"]
+
+ENTRYPOINT ["npm", "run"]
+
+CMD ["start:auth-code"]
