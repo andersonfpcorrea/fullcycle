@@ -1,27 +1,62 @@
-import express, { Request, Response, response } from "express";
+import crypto from "crypto";
+import session, { Session } from "express-session";
+import express, { Request, RequestHandler, Response } from "express";
+import jwt from "jsonwebtoken";
 
 // OBS: for the 'authorization code' flow we must define in the
 // KeyCloak dashboard the realm "Access settings" "root url"
 // In this case, "root URL" is "http://localhost:3000"
 
+interface CustomRequest extends Request {
+  session: { nonce?: string } & Session;
+  nonce?: string;
+}
+
 const app = express();
+const memoryStore = new session.MemoryStore();
+
+app.use(
+  session({
+    secret: "my-secret",
+    resave: false,
+    saveUninitialized: false,
+    store: memoryStore,
+  })
+);
+
+const middlewareIsAuth = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  //@ts-expect-error - type mismatch
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+  next();
+};
 
 app.get("/", (req, res) => {
   res.send("Hello");
 });
 
-app.get("/login", (_req: Request, res: Response) => {
+app.get("/login", (req: CustomRequest, res: Response) => {
+  const nonce = crypto.randomBytes(16).toString("base64");
+  req.session.nonce = nonce;
+  req.session.save();
+
   const loginParams = new URLSearchParams({
     client_id: "fullcycle-client",
     redirect_uri: "http://localhost:3000/callback",
     response_type: "code",
     scope: "openid",
+    nonce,
   });
   const url = `http://localhost:8080/realms/fullcycle-realm/protocol/openid-connect/auth?${loginParams.toString()}`;
   res.redirect(url);
 });
 
-app.get("/callback", async (req, res) => {
+app.get("/callback", async (req: CustomRequest, res) => {
   const bodyParams = new URLSearchParams({
     client_id: "fullcycle-client",
     grant_type: "authorization_code",
@@ -37,6 +72,18 @@ app.get("/callback", async (req, res) => {
     body: bodyParams.toString(),
   });
   const result = await response.json();
+  const payloadAccessToken = jwt.decode(result.access_token) as jwt.JwtPayload;
+  const refreshToken = jwt.decode(result.refresh_token) as jwt.JwtPayload;
+  const idToken = jwt.decode(result.id_token) as jwt.JwtPayload;
+
+  if (
+    req.session.nonce &&
+    ![payloadAccessToken.nonce, refreshToken.nonce, idToken.nonce].includes(
+      req.session?.nonce
+    )
+  ) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   res.json(result);
 });
 
