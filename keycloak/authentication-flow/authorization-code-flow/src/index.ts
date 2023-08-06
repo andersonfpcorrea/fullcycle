@@ -8,8 +8,7 @@ import jwt from "jsonwebtoken";
 // In this case, "root URL" is "http://localhost:3000"
 
 interface CustomRequest extends Request {
-  session: { nonce?: string } & Session;
-  nonce?: string;
+  session: { nonce?: string; user?: string; state?: string } & Session;
 }
 
 const app = express();
@@ -42,7 +41,10 @@ app.get("/", (req, res) => {
 
 app.get("/login", (req: CustomRequest, res: Response) => {
   const nonce = crypto.randomBytes(16).toString("base64");
+  const state = crypto.randomBytes(16).toString("base64");
+
   req.session.nonce = nonce;
+  req.session.state = state;
   req.session.save();
 
   const loginParams = new URLSearchParams({
@@ -51,12 +53,17 @@ app.get("/login", (req: CustomRequest, res: Response) => {
     response_type: "code",
     scope: "openid",
     nonce,
+    state,
   });
   const url = `http://localhost:8080/realms/fullcycle-realm/protocol/openid-connect/auth?${loginParams.toString()}`;
   res.redirect(url);
 });
 
 app.get("/callback", async (req: CustomRequest, res) => {
+  if (req.session.user) return res.redirect("/admin");
+  if (req.query.state !== req.session.state) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   const bodyParams = new URLSearchParams({
     client_id: "fullcycle-client",
     grant_type: "authorization_code",
