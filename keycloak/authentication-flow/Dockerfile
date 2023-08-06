@@ -6,6 +6,4 @@ COPY . .
 
 RUN ["npm", "install"]
 
-ENTRYPOINT ["npm", "run"]
-
-CMD ["start:auth-code"]
+CMD ["tail", "-f", "/dev/null"]
