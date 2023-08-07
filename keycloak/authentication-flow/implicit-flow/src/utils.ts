@@ -70,7 +70,7 @@ export function makeLogoutUrl() {
   }
   const logoutParams = new URLSearchParams({
     //client_id: "fullcycle-client",
-    id_token_hint: Cookies.get("id_token") as string,
+    id_token_hint: Cookies.get("id_token") ?? "",
     post_logout_redirect_uri: "http://localhost:3000/login",
   });
 

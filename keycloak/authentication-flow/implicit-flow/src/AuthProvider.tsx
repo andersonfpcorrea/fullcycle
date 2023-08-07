@@ -6,24 +6,17 @@ type AuthContextProps = {
   auth: JWTPayload | null;
   makeLoginUrl: () => string;
   makeLogoutUrl: () => string | false;
-  login: (accessToken: string, idToken: string, state: string) => JWTPayload;
+  login?: (accessToken: string, idToken: string, state: string) => JWTPayload;
 };
 
 const initContextData: AuthContextProps = {
   auth: null,
   makeLoginUrl: utils.makeLoginUrl,
-  //@ts-expect-error - this is a mock function
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  makeLogoutUrl: () => {},
-  //@ts-expect-error - this is a mock function
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  login: () => {},
+  makeLogoutUrl: () => false,
 };
 
-//create a context for the login state
 export const AuthContext = createContext(initContextData);
 
-//create a provider for the login state
 export const AuthProvider = (props: PropsWithChildren) => {
   const makeLogin = useCallback(
     (accessToken: string, idToken: string, state: string) => {
