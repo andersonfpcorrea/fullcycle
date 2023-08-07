@@ -12,7 +12,7 @@ export function makeLoginUrl() {
   const loginUrlParams = new URLSearchParams({
     client_id: "fullcycle-client",
     redirect_uri: "http://localhost:3000/callback",
-    response_type: "token id_token",
+    response_type: "token id_token", // !IMPORTANT if we include only "token" we'll get only the access_token (not the id_token)
     nonce: nonce,
     state: state,
   });

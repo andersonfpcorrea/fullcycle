@@ -14,15 +14,15 @@ export function Callback() {
     }
 
     const searchParams = new URLSearchParams(hash.replace("#", ""));
-    const accessToken = searchParams.get("access_token") as string;
-    const idToken = searchParams.get("id_token") as string;
-    const state = searchParams.get("state") as string;
+    const accessToken = searchParams.get("access_token");
+    const idToken = searchParams.get("id_token");
+    const state = searchParams.get("state");
 
     if (!accessToken || !idToken || !state) {
       navigate("/login");
+    } else {
+      login(accessToken, idToken, state);
     }
-
-    login(accessToken, idToken, state);
   }, [hash, login, auth, navigate]);
 
   return <div>Loading...</div>;
