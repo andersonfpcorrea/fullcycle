@@ -4,10 +4,12 @@
   "description": "",
   "scripts": {
     "start:auth-code": "nodemon --exec ts-node ./authorization-code-flow/src/index.ts",
-    "start:implicit": "cd implicit-flow && npm run dev"
+    "start:implicit": "cd implicit-flow && npm run dev",
+    "start:hybrid": "cd hybrid-flow && npm run dev"
   },
   "workspaces": [
-    "implicit-flow"
+    "implicit-flow",
+    "hybrid-flow"
   ],
   "keywords": [],
   "author": "",
